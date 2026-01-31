@@ -9,35 +9,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- React, ReactDOM e Babel -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Lucide Icons (Versão compatível com Browser) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body { margin: 0; padding: 0; background-color: #f8fafc; }
+        body { margin: 0; padding: 0; background-color: #f8fafc; font-family: sans-serif; }
         #root { min-height: 100vh; }
+        .clip-path-slant { clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%); }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
-        // Importação de ícones da Lucide para ambiente sem Build
-        import * as LucideIcons from 'https://esm.sh/lucide-react@0.284.0';
-        
-        // Extração de hooks e ícones para o escopo global do script
+    <!-- Usamos text/babel para o navegador processar o código React/JSX diretamente -->
+    <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
-        const { 
-            Search, MapPin, BedDouble, Bath, Square, 
-            Car, ArrowRight, X, CheckCircle2, ChevronRight,
-            ShieldCheck, Calendar, Building2, Info, Clock 
-        } = LucideIcons;
 
-        /**
-         * COLOQUE O CÓDIGO DO SEU COMPONENTE ABAIXO
-         * (Apenas a parte que começa em "const imoveis = [" até o fim do App)
-         * Nota: Removi os imports do topo pois já estão definidos acima.
-         */
+        // Mock de ícones para evitar erros de importação em ambientes sem build
+        // Usamos SVGs simples ou referências à biblioteca Lucide carregada via script
+        const Icon = ({ name, size = 24, className = "" }) => {
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
+        };
 
         const imoveis = [
           {
@@ -47,31 +48,11 @@
             bairro: "Itaim Bibi",
             cidade: "São Paulo",
             entrega: "Out/2027",
-            endereco: "Rua Leopoldo Couto de Magalhães Jr - Itaim Bibi, SP",
             preco: 3200000,
-            condominioEstimado: 2500,
             areaM2: 120,
             quartos: 3,
-            banheiros: 3,
-            vagas: 2,
-            tags: ["Luxo", "Itaim Bibi", "Automação"],
-            descricaoCurta: "O novo ícone arquitetônico de São Paulo.",
-            descricaoLonga: "O Apex Itaim traz o que há de mais moderno em design global para o coração financeiro de São Paulo. Apartamentos amplos com tecnologia de ponta e lazer suspenso.",
-            destaques: [
-              "Projeto assinado por escritório premiado",
-              "Lazer no 25º andar com vista 360º",
-              "Vagas para carros elétricos",
-              "Segurança com reconhecimento facial"
-            ],
-            faq: [
-              { q: "Qual o estágio da obra?", a: "Estamos na fase de fundação profunda." },
-              { q: "Há unidades decoradas?", a: "Sim, o stand conta com o apartamento modelo de 120m²." }
-            ],
-            imagens: [
-              "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1600",
-              "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1600",
-              "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=1600"
-            ]
+            imagens: ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1600"],
+            descricaoLonga: "O Apex Itaim traz o que há de mais moderno em design global para o coração financeiro de São Paulo."
           },
           {
             id: "bc-ocean-500",
@@ -80,301 +61,109 @@
             bairro: "Centro",
             cidade: "Balneário Camboriú",
             entrega: "Dez/2028",
-            endereco: "Avenida Atlântica - Centro, Balneário Camboriú, SC",
             preco: 5800000,
-            condominioEstimado: 3200,
             areaM2: 210,
             quartos: 4,
-            banheiros: 5,
-            vagas: 3,
-            tags: ["Frente Mar", "Alto Padrão", "Investimento"],
-            descricaoCurta: "O metro quadrado que mais valoriza no Brasil.",
-            descricaoLonga: "O Ocean Tower é um empreendimento de altíssimo padrão com vista definitiva para o mar. Plantas exclusivas com uma unidade por andar.",
-            destaques: [
-              "Piscina privativa na varanda",
-              "Acabamento em mármore importado",
-              "Spa e heliponto privativo",
-              "Janelas do chão ao teto"
-            ],
-            faq: [
-              { q: "Quais as opções de lazer?", a: "Mais de 20 itens de lazer, incluindo boate privativa e simulador de golf." }
-            ],
-            imagens: [
-              "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1600",
-              "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80&w=1600",
-              "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80&w=1600"
-            ]
-          },
-          {
-            id: "copacabana-lan-210",
-            titulo: "Copa-Studio: O novo hub de investimento em Copacabana",
-            tipo: "Pronto para Morar/Novo",
-            bairro: "Copacabana",
-            cidade: "Rio de Janeiro",
-            entrega: "Imediata",
-            endereco: "Rua Barata Ribeiro, 520 - Copacabana, Rio de Janeiro - RJ",
-            preco: 1180000,
-            condominioEstimado: 1250,
-            areaM2: 68,
-            quartos: 2,
-            banheiros: 1,
-            vagas: 0,
-            tags: ["Pronto", "Ideal para Airbnb", "Rooftop com Piscina"],
-            descricaoCurta: "Design moderno e lazer completo em Copacabana.",
-            descricaoLonga: "Apartamentos recém-entregues com acabamento impecável. O Copa-Studio oferece a conveniência de morar perto de tudo com um lazer de tirar o fôlego no rooftop.",
-            destaques: [
-              "Unidades prontas com chaves na mão",
-              "Rooftop com piscina, bar e academia",
-              "Coworking e lavanderia coletiva",
-              "Fácil gestão de locação por curta temporada"
-            ],
-            faq: [
-              { q: "O prédio tem portaria?", a: "Sim, portaria 24h e controle de acesso biométrico." }
-            ],
-            imagens: [
-              "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1600",
-              "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&q=80&w=1600",
-              "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=1600"
-            ]
+            imagens: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1600"],
+            descricaoLonga: "O Ocean Tower é um empreendimento de altíssimo padrão com vista definitiva para o mar."
           }
         ];
 
         const Header = ({ navigateTo }) => (
           <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-              <div 
-                className="flex items-center gap-2 cursor-pointer group" 
-                onClick={() => navigateTo('home')}
-              >
-                <Building2 className="text-blue-700" size={32} />
+              <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigateTo('home')}>
+                <div className="text-blue-700 font-bold text-2xl">🏢</div>
                 <span className="text-xl font-black tracking-tighter text-slate-900 uppercase">Imóvel<span className="text-blue-700"> na Planta</span></span>
               </div>
               <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-600">
-                <button onClick={() => navigateTo('home')} className="hover:text-blue-700 transition-colors">Lançamentos</button>
-                <button className="hover:text-blue-700 transition-colors">Investimento</button>
-                <button className="px-6 py-2.5 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition-all shadow-lg shadow-blue-200">
-                  Minha Conta
-                </button>
+                <button onClick={() => navigateTo('home')} className="hover:text-blue-700">Lançamentos</button>
+                <button className="px-6 py-2.5 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition-all">Minha Conta</button>
               </nav>
             </div>
           </header>
         );
 
-        const Footer = () => (
-          <footer className="bg-slate-50 border-t border-slate-200 pt-16 pb-8">
-            <div className="max-w-7xl mx-auto px-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 text-center md:text-left">
-                <div>
-                  <h3 className="text-slate-900 font-bold mb-4 flex items-center justify-center md:justify-start gap-2">
-                    <Building2 className="text-blue-700" size={24} /> IMÓVEL NA PLANTA
-                  </h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">
-                    Curadoria exclusiva dos projetos que estão definindo o novo padrão de morar e investir no Brasil.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="text-slate-900 font-semibold mb-4">Mercados em Alta</h4>
-                  <ul className="text-slate-500 text-sm space-y-3 font-medium">
-                    <li>Itaim Bibi & Jardins (SP)</li>
-                    <li>Balneário Camboriú (SC)</li>
-                    <li>Zona Sul & Barra (RJ)</li>
-                    <li>Curadoria Nacional</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-slate-900 font-semibold mb-4">Atendimento</h4>
-                  <p className="text-slate-500 text-sm">premium@imovelnaplanta.com.br</p>
-                  <p className="text-blue-700 font-bold text-sm mt-2">0800-400-9000</p>
-                </div>
-              </div>
-              <div className="pt-8 border-t border-slate-200 text-center text-xs text-slate-400">
-                © 2024 Portal Imóvel na Planta — Tecnologia em Real Estate.
-              </div>
-            </div>
-          </footer>
-        );
-
         function App() {
           const [page, setPage] = useState('home');
-          const [searchQuery, setSearchQuery] = useState('');
-          const [selectedImovelId, setSelectedImovelId] = useState(null);
-          const [isModalOpen, setIsModalOpen] = useState(false);
-          const [modalType, setModalType] = useState('contato');
-          const [formStatus, setFormStatus] = useState('idle');
+          const [selectedId, setSelectedId] = useState(null);
 
-          const navigateTo = (p, params) => {
+          const navigateTo = (p, id = null) => {
             window.scrollTo(0, 0);
-            if (params?.q !== undefined) setSearchQuery(params.q);
-            if (params?.id) setSelectedImovelId(params.id);
             setPage(p);
+            if(id) setSelectedId(id);
           };
 
-          const currentImovel = useMemo(() => 
-            imoveis.find(i => i.id === selectedImovelId), 
-            [selectedImovelId]
-          );
-
-          const filteredImoveis = useMemo(() => {
-            if (!searchQuery) return imoveis;
-            const q = searchQuery.toLowerCase();
-            return imoveis.filter(i => 
-              i.bairro.toLowerCase().includes(q) || 
-              i.cidade.toLowerCase().includes(q) ||
-              i.endereco.toLowerCase().includes(q) || 
-              i.titulo.toLowerCase().includes(q)
-            );
-          }, [searchQuery]);
-
-          const openModal = (type) => {
-            setModalType(type);
-            setIsModalOpen(true);
-          };
-
-          const handleFormSubmit = (e) => {
-            e.preventDefault();
-            setFormStatus('sending');
-            setTimeout(() => {
-              setFormStatus('success');
-              setTimeout(() => {
-                setIsModalOpen(false);
-                setFormStatus('idle');
-              }, 3000);
-            }, 1200);
-          };
+          const currentImovel = imoveis.find(i => i.id === selectedId);
 
           return (
-            <div className="min-h-screen bg-white font-sans text-slate-900">
+            <div className="min-h-screen">
               <Header navigateTo={navigateTo} />
-
-              {page === 'home' && (
+              
+              {page === 'home' ? (
                 <main>
-                  <section className="relative min-h-[90vh] flex items-center justify-center pt-10 pb-12">
-                    <div className="absolute inset-0 bg-slate-50 overflow-hidden">
-                       <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-50/40 clip-path-slant hidden lg:block"></div>
-                    </div>
-                    
-                    <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                      <div>
-                        <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-blue-100 text-blue-700 text-[11px] font-black tracking-widest uppercase rounded-full mb-8 shadow-sm">
-                          <span className="w-2 h-2 bg-blue-600 rounded-full"></span> Curadoria Premium Nacional
-                        </span>
-                        <h1 className="text-5xl md:text-7xl font-black text-slate-950 mb-8 leading-[1.1] tracking-tighter">
+                  <section className="py-20 px-6 max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h1 className="text-5xl md:text-7xl font-black text-slate-950 mb-6 tracking-tighter">
                           A elite dos lançamentos <br />
-                          <span className="text-blue-700">agora num só lugar.</span>
+                          <span className="text-blue-700">num só lugar.</span>
                         </h1>
-                        <p className="text-slate-600 text-xl mb-12 max-w-lg leading-relaxed font-medium">
-                          Antecipe-se ao mercado. Tenha acesso exclusivo aos projetos imobiliários mais cobiçados do Brasil, antes mesmo da abertura oficial de vendas.
-                        </p>
-                        
-                        <div className="bg-white p-3 rounded-[2rem] shadow-2xl shadow-blue-100/50 border border-slate-100 flex flex-col md:flex-row items-center gap-3 max-w-2xl">
-                          <div className="flex-1 flex items-center px-5 gap-3 w-full">
-                            <Search className="text-blue-600 shrink-0" size={24} />
-                            <input 
-                              type="text"
-                              placeholder="Onde deseja morar ou investir?"
-                              className="w-full h-14 outline-none text-slate-700 font-bold placeholder:text-slate-400"
-                              value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
-                              onKeyDown={(e) => e.key === 'Enter' && navigateTo('busca', { q: searchQuery })}
-                            />
-                          </div>
-                          <button 
-                            onClick={() => navigateTo('busca', { q: searchQuery })}
-                            className="w-full md:w-auto px-10 py-5 bg-blue-700 text-white font-black rounded-2xl hover:bg-blue-800 transition-all shadow-xl shadow-blue-200"
-                          >
-                            Ver Oportunidades
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div className="hidden lg:grid grid-cols-2 gap-6 relative">
-                         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=600" className="rounded-[2.5rem] h-80 w-full object-cover shadow-2xl" />
-                         <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600" className="rounded-[2.5rem] h-56 w-full object-cover shadow-2xl mt-12" />
-                      </div>
+                        <p className="text-slate-600 text-xl max-w-2xl mx-auto">Curadoria exclusiva dos projetos mais cobiçados do Brasil.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        {imoveis.map(imovel => (
+                            <div key={imovel.id} className="group bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl transition-all cursor-pointer" onClick={() => navigateTo('detalhe', imovel.id)}>
+                                <img src={imovel.imagens[0]} className="h-72 w-full object-cover" alt={imovel.titulo} />
+                                <div className="p-8">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                            <span className="text-blue-600 font-bold text-xs uppercase tracking-widest">{imovel.tipo}</span>
+                                            <h3 className="text-2xl font-black text-slate-900 mt-1">{imovel.titulo}</h3>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4 text-slate-500 font-medium text-sm mb-6">
+                                        <span>📍 {imovel.bairro}, {imovel.cidade}</span>
+                                        <span>📅 {imovel.entrega}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center pt-6 border-t border-slate-50">
+                                        <span className="text-2xl font-black text-blue-700">R$ {imovel.preco.toLocaleString()}</span>
+                                        <span className="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-bold group-hover:bg-blue-700 transition-colors">Ver Detalhes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                   </section>
                 </main>
-              )}
-
-              {page === 'busca' && (
-                <main className="max-w-7xl mx-auto px-6 py-20">
-                  <h2 className="text-4xl font-black text-slate-950 mb-12 tracking-tighter">
-                    {searchQuery ? `Projetos para "${searchQuery}"` : "Seleção Nacional"}
-                  </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                    {filteredImoveis.map(item => (
-                      <div 
-                        key={item.id} 
-                        className="group bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden hover:shadow-3xl transition-all cursor-pointer"
-                        onClick={() => navigateTo('detalhe', { id: item.id })}
-                      >
-                        <img src={item.imagens[0]} className="h-64 w-full object-cover" />
-                        <div className="p-8">
-                          <h3 className="text-xl font-black mb-4">{item.titulo}</h3>
-                          <div className="flex justify-between items-center pt-4 border-t border-slate-50">
-                            <span className="text-2xl font-black text-blue-700">R$ {item.preco.toLocaleString()}</span>
-                            <ArrowRight size={20} />
-                          </div>
+              ) : (
+                <main className="max-w-4xl mx-auto px-6 py-20">
+                    <button onClick={() => setPage('home')} className="text-blue-700 font-bold mb-8">← Voltar</button>
+                    {currentImovel && (
+                        <div>
+                            <h1 className="text-4xl font-black mb-6">{currentImovel.titulo}</h1>
+                            <img src={currentImovel.imagens[0]} className="w-full h-96 object-cover rounded-[2rem] mb-10" />
+                            <p className="text-xl text-slate-600 leading-relaxed">{currentImovel.descricaoLonga}</p>
+                            <div className="mt-10 p-8 bg-blue-50 rounded-[2rem] border border-blue-100">
+                                <h3 className="text-xl font-bold mb-4">Interessado neste imóvel?</h3>
+                                <button className="w-full py-4 bg-blue-700 text-white font-black rounded-xl">Solicitar Consultoria Gratuita</button>
+                            </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </main>
-              )}
-
-              {page === 'detalhe' && currentImovel && (
-                <main className="py-20 max-w-7xl mx-auto px-6">
-                  <button onClick={() => setPage('home')} className="mb-8 font-bold text-blue-700 flex items-center gap-2">
-                    ← Voltar
-                  </button>
-                  <h1 className="text-5xl font-black mb-8">{currentImovel.titulo}</h1>
-                  <img src={currentImovel.imagens[0]} className="w-full h-[60vh] object-cover rounded-[3rem] mb-12" />
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    <div className="lg:col-span-2">
-                      <p className="text-xl text-slate-600 leading-relaxed mb-8">{currentImovel.descricaoLonga}</p>
-                    </div>
-                    <div className="bg-slate-50 p-10 rounded-[2.5rem]">
-                      <h4 className="font-black text-2xl mb-6">Interesse no Projeto?</h4>
-                      <button 
-                        onClick={() => openModal('contato')}
-                        className="w-full py-5 bg-blue-700 text-white font-black rounded-2xl"
-                      >
-                        Solicitar Apresentação
-                      </button>
-                    </div>
-                  </div>
-                </main>
-              )}
-
-              <Footer />
-
-              {isModalOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/80 backdrop-blur-sm">
-                  <div className="bg-white p-12 rounded-[3rem] max-w-md w-full relative">
-                    <button onClick={() => setIsModalOpen(false)} className="absolute top-8 right-8"><X /></button>
-                    {formStatus === 'success' ? (
-                      <div className="text-center">
-                        <CheckCircle2 size={48} className="mx-auto text-green-500 mb-4" />
-                        <h3 className="text-2xl font-black">Enviado com sucesso!</h3>
-                      </div>
-                    ) : (
-                      <form onSubmit={handleFormSubmit} className="space-y-6">
-                        <h3 className="text-2xl font-black">Entre em contacto</h3>
-                        <input required placeholder="Seu Nome" className="w-full p-4 bg-slate-50 rounded-xl" />
-                        <input required placeholder="Seu WhatsApp" className="w-full p-4 bg-slate-50 rounded-xl" />
-                        <button className="w-full py-4 bg-blue-700 text-white font-black rounded-xl">Enviar</button>
-                      </form>
                     )}
-                  </div>
-                </div>
+                </main>
               )}
+              
+              <footer className="bg-slate-900 text-white py-12 mt-20">
+                <div className="max-w-7xl mx-auto px-6 text-center">
+                    <p className="opacity-50 text-sm">© 2024 Imóvel na Planta Premium. Todos os direitos reservados.</p>
+                </div>
+              </footer>
             </div>
           );
         }
 
-        // Renderização final
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(App));
+        root.render(<App />);
     </script>
 </body>
 </html>
