@@ -3,39 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imóvel na Planta | Portal Imobiliário</title>
+    <title>Imóvel na Planta | Portal Imobiliário Premium</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- React, ReactDOM e Babel -->
+    <!-- React, ReactDOM e Babel para rodar JSX direto no browser -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
-    <!-- Lucide Icons (Versão compatível com Browser) -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body { margin: 0; padding: 0; background-color: #f8fafc; font-family: sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+        
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
+        }
+        
         #root { min-height: 100vh; }
-        .clip-path-slant { clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%); }
+
+        .clip-path-slant { 
+            clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%); 
+        }
+
+        .shadow-3xl {
+            box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animação suave para as transições de página */
+        .page-enter {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-    <!-- Usamos text/babel para o navegador processar o código React/JSX diretamente -->
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
 
-        // Mock de ícones para evitar erros de importação em ambientes sem build
-        // Usamos SVGs simples ou referências à biblioteca Lucide carregada via script
+        // Componente de Ícone para facilitar o uso da Lucide sem imports complexos
         const Icon = ({ name, size = 24, className = "" }) => {
             useEffect(() => {
-                if (window.lucide) {
-                    window.lucide.createIcons();
-                }
+                if (window.lucide) window.lucide.createIcons();
             }, [name]);
             return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
         };
@@ -48,11 +69,30 @@
             bairro: "Itaim Bibi",
             cidade: "São Paulo",
             entrega: "Out/2027",
+            endereco: "Rua Leopoldo Couto de Magalhães Jr - Itaim Bibi, SP",
             preco: 3200000,
+            condominioEstimado: 2500,
             areaM2: 120,
             quartos: 3,
-            imagens: ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1600"],
-            descricaoLonga: "O Apex Itaim traz o que há de mais moderno em design global para o coração financeiro de São Paulo."
+            banheiros: 3,
+            vagas: 2,
+            tags: ["Luxo", "Itaim Bibi", "Automação"],
+            descricaoCurta: "O novo ícone arquitetônico de São Paulo.",
+            descricaoLonga: "O Apex Itaim traz o que há de mais moderno em design global para o coração financeiro de São Paulo. Apartamentos amplos com tecnologia de ponta e lazer suspenso assinado por designers premiados.",
+            destaques: [
+              "Projeto assinado por escritório premiado",
+              "Lazer no 25º andar com vista 360º",
+              "Vagas para carros elétricos",
+              "Segurança com reconhecimento facial"
+            ],
+            faq: [
+              { q: "Qual o estágio da obra?", a: "Estamos na fase de fundação profunda." },
+              { q: "Há unidades decoradas?", a: "Sim, o stand conta com o apartamento modelo de 120m²." }
+            ],
+            imagens: [
+              "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1600",
+              "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1600"
+            ]
           },
           {
             id: "bc-ocean-500",
@@ -61,32 +101,126 @@
             bairro: "Centro",
             cidade: "Balneário Camboriú",
             entrega: "Dez/2028",
+            endereco: "Avenida Atlântica - Centro, Balneário Camboriú, SC",
             preco: 5800000,
+            condominioEstimado: 3200,
             areaM2: 210,
             quartos: 4,
-            imagens: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1600"],
-            descricaoLonga: "O Ocean Tower é um empreendimento de altíssimo padrão com vista definitiva para o mar."
+            banheiros: 5,
+            vagas: 3,
+            tags: ["Frente Mar", "Alto Padrão", "Investimento"],
+            descricaoCurta: "O metro quadrado que mais valoriza no Brasil.",
+            descricaoLonga: "O Ocean Tower é um empreendimento de altíssimo padrão com vista definitiva para o mar. Plantas exclusivas com uma unidade por andar e lazer privativo.",
+            destaques: [
+              "Piscina privativa na varanda",
+              "Acabamento em mármore importado",
+              "Spa e heliponto privativo",
+              "Janelas do chão ao teto"
+            ],
+            faq: [
+              { q: "Quais as opções de lazer?", a: "Mais de 20 itens de lazer, incluindo boate privativa." }
+            ],
+            imagens: [
+              "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1600",
+              "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&q=80&w=1600"
+            ]
+          },
+          {
+            id: "rj-copa-210",
+            titulo: "Copa-Studio: O novo hub em Copacabana",
+            tipo: "Pronto para Morar",
+            bairro: "Copacabana",
+            cidade: "Rio de Janeiro",
+            entrega: "Imediata",
+            endereco: "Rua Barata Ribeiro - Copacabana, Rio de Janeiro, RJ",
+            preco: 1180000,
+            condominioEstimado: 1100,
+            areaM2: 65,
+            quartos: 2,
+            banheiros: 1,
+            vagas: 0,
+            tags: ["Pronto", "Rentabilidade", "Rooftop"],
+            descricaoCurta: "Ideal para morar ou rentabilizar via Airbnb.",
+            descricaoLonga: "Unidades modernas entregues prontas para mobiliar. Localização estratégica a poucos metros da praia de Copacabana com rooftop completo.",
+            destaques: [
+                "Piscina com vista para o Cristo",
+                "Gestão de locação profissional",
+                "Lavanderia OMO no prédio",
+                "Coworking equipado"
+            ],
+            faq: [
+                { q: "O prédio permite Airbnb?", a: "Sim, a convenção do condomínio foi criada prevendo locação de curta temporada." }
+            ],
+            imagens: [
+              "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1600",
+              "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=1600"
+            ]
           }
         ];
 
         const Header = ({ navigateTo }) => (
-          <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-100">
+          <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-              <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigateTo('home')}>
-                <div className="text-blue-700 font-bold text-2xl">🏢</div>
-                <span className="text-xl font-black tracking-tighter text-slate-900 uppercase">Imóvel<span className="text-blue-700"> na Planta</span></span>
+              <div 
+                className="flex items-center gap-2 cursor-pointer group" 
+                onClick={() => navigateTo('home')}
+              >
+                <Icon name="building-2" className="text-blue-700" size={32} />
+                <span className="text-xl font-black tracking-tighter text-slate-900 uppercase">
+                    Imóvel<span className="text-blue-700"> na Planta</span>
+                </span>
               </div>
               <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-600">
-                <button onClick={() => navigateTo('home')} className="hover:text-blue-700">Lançamentos</button>
-                <button className="px-6 py-2.5 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition-all">Minha Conta</button>
+                <button onClick={() => navigateTo('home')} className="hover:text-blue-700 transition-colors">Lançamentos</button>
+                <button className="hover:text-blue-700 transition-colors">Investimento</button>
+                <button className="px-6 py-2.5 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition-all shadow-lg shadow-blue-200">
+                  Minha Conta
+                </button>
               </nav>
             </div>
           </header>
         );
 
+        const Footer = () => (
+          <footer className="bg-slate-50 border-t border-slate-200 pt-16 pb-8 mt-20">
+            <div className="max-w-7xl mx-auto px-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 text-center md:text-left">
+                <div>
+                  <h3 className="text-slate-900 font-bold mb-4 flex items-center justify-center md:justify-start gap-2">
+                    <Icon name="building-2" className="text-blue-700" size={24} /> IMÓVEL NA PLANTA
+                  </h3>
+                  <p className="text-slate-500 text-sm leading-relaxed">
+                    Curadoria exclusiva dos projetos que estão definindo o novo padrão de morar e investir no Brasil.
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-slate-900 font-semibold mb-4">Mercados em Alta</h4>
+                  <ul className="text-slate-500 text-sm space-y-3 font-medium">
+                    <li>Itaim Bibi & Jardins (SP)</li>
+                    <li>Balneário Camboriú (SC)</li>
+                    <li>Zona Sul & Barra (RJ)</li>
+                    <li>Curadoria Nacional</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-slate-900 font-semibold mb-4">Atendimento</h4>
+                  <p className="text-slate-500 text-sm">premium@imovelnaplanta.com.br</p>
+                  <p className="text-blue-700 font-bold text-sm mt-2">0800-400-9000</p>
+                </div>
+              </div>
+              <div className="pt-8 border-t border-slate-200 text-center text-xs text-slate-400">
+                © 2024 Portal Imóvel na Planta — Tecnologia em Real Estate.
+              </div>
+            </div>
+          </footer>
+        );
+
         function App() {
           const [page, setPage] = useState('home');
+          const [searchQuery, setSearchQuery] = useState('');
           const [selectedId, setSelectedId] = useState(null);
+          const [isModalOpen, setIsModalOpen] = useState(false);
+          const [modalType, setModalType] = useState('contato'); // 'contato' or 'agendamento'
 
           const navigateTo = (p, id = null) => {
             window.scrollTo(0, 0);
@@ -94,41 +228,122 @@
             if(id) setSelectedId(id);
           };
 
-          const currentImovel = imoveis.find(i => i.id === selectedId);
+          const openModal = (type) => {
+            setModalType(type);
+            setIsModalOpen(true);
+          }
+
+          const currentImovel = useMemo(() => 
+            imoveis.find(i => i.id === selectedId), 
+            [selectedId]
+          );
+
+          const filteredImoveis = useMemo(() => {
+            if (!searchQuery) return imoveis;
+            const q = searchQuery.toLowerCase();
+            return imoveis.filter(i => 
+              i.bairro.toLowerCase().includes(q) || 
+              i.cidade.toLowerCase().includes(q) ||
+              i.titulo.toLowerCase().includes(q)
+            );
+          }, [searchQuery]);
 
           return (
-            <div className="min-h-screen">
+            <div className="min-h-screen flex flex-col">
               <Header navigateTo={navigateTo} />
-              
-              {page === 'home' ? (
-                <main>
-                  <section className="py-20 px-6 max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h1 className="text-5xl md:text-7xl font-black text-slate-950 mb-6 tracking-tighter">
+
+              {page === 'home' && (
+                <main className="flex-1 page-enter">
+                  {/* Hero Section */}
+                  <section className="relative min-h-[85vh] flex items-center justify-center pt-10 pb-12 overflow-hidden">
+                    <div className="absolute inset-0 bg-slate-50">
+                       <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-50/40 clip-path-slant hidden lg:block"></div>
+                    </div>
+                    
+                    <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                      <div>
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-blue-100 text-blue-700 text-[11px] font-black tracking-widest uppercase rounded-full mb-8 shadow-sm">
+                          <span className="w-2 h-2 bg-blue-600 rounded-full"></span> Curadoria Premium Nacional
+                        </span>
+                        <h1 className="text-5xl md:text-7xl font-black text-slate-950 mb-8 leading-[1.1] tracking-tighter">
                           A elite dos lançamentos <br />
                           <span className="text-blue-700">num só lugar.</span>
                         </h1>
-                        <p className="text-slate-600 text-xl max-w-2xl mx-auto">Curadoria exclusiva dos projetos mais cobiçados do Brasil.</p>
+                        <p className="text-slate-600 text-xl mb-12 max-w-lg leading-relaxed font-medium">
+                          Antecipe-se ao mercado. Tenha acesso exclusivo aos projetos imobiliários mais cobiçados do Brasil.
+                        </p>
+                        
+                        <div className="bg-white p-3 rounded-[2rem] shadow-2xl shadow-blue-100/50 border border-slate-100 flex flex-col md:flex-row items-center gap-3 max-w-2xl">
+                          <div className="flex-1 flex items-center px-5 gap-3 w-full">
+                            <Icon name="search" className="text-blue-600 shrink-0" size={24} />
+                            <input 
+                              type="text"
+                              placeholder="Qual bairro ou cidade?"
+                              className="w-full h-14 outline-none text-slate-700 font-bold placeholder:text-slate-400"
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                          </div>
+                          <button 
+                            onClick={() => setPage('catalogo')}
+                            className="w-full md:w-auto px-10 py-5 bg-blue-700 text-white font-black rounded-2xl hover:bg-blue-800 transition-all"
+                          >
+                            Explorar
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="hidden lg:grid grid-cols-2 gap-6 relative">
+                         <img src={imoveis[0].imagens[0]} className="rounded-[2.5rem] h-80 w-full object-cover shadow-2xl" />
+                         <img src={imoveis[1].imagens[0]} className="rounded-[2.5rem] h-56 w-full object-cover shadow-2xl mt-12" />
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Featured Grid */}
+                  <section className="py-24 bg-white max-w-7xl mx-auto px-6">
+                    <div className="flex justify-between items-end mb-16">
+                        <div>
+                            <h2 className="text-4xl font-black tracking-tighter mb-2">Destaques da Semana</h2>
+                            <p className="text-slate-500 font-medium">Os projetos que estão movimentando o mercado hoje.</p>
+                        </div>
+                        <button onClick={() => setPage('catalogo')} className="text-blue-700 font-bold flex items-center gap-2 group">
+                            Ver todos <Icon name="chevron-right" size={20} className="group-hover:translate-x-1 transition-transform" />
+                        </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        {imoveis.map(imovel => (
-                            <div key={imovel.id} className="group bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl transition-all cursor-pointer" onClick={() => navigateTo('detalhe', imovel.id)}>
-                                <img src={imovel.imagens[0]} className="h-72 w-full object-cover" alt={imovel.titulo} />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        {filteredImoveis.map(imovel => (
+                            <div 
+                                key={imovel.id} 
+                                className="group bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden hover:shadow-3xl transition-all cursor-pointer"
+                                onClick={() => navigateTo('detalhe', imovel.id)}
+                            >
+                                <div className="relative h-72 overflow-hidden">
+                                    <img src={imovel.imagens[0]} className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                    <div className="absolute top-6 left-6 flex gap-2">
+                                        <span className="px-4 py-1.5 bg-white/90 backdrop-blur text-[10px] font-black uppercase rounded-full">{imovel.tipo}</span>
+                                    </div>
+                                </div>
                                 <div className="p-8">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div>
-                                            <span className="text-blue-600 font-bold text-xs uppercase tracking-widest">{imovel.tipo}</span>
-                                            <h3 className="text-2xl font-black text-slate-900 mt-1">{imovel.titulo}</h3>
-                                        </div>
+                                    <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">
+                                        <Icon name="map-pin" size={14} /> {imovel.bairro}, {imovel.cidade}
                                     </div>
-                                    <div className="flex items-center gap-4 text-slate-500 font-medium text-sm mb-6">
-                                        <span>📍 {imovel.bairro}, {imovel.cidade}</span>
-                                        <span>📅 {imovel.entrega}</span>
+                                    <h3 className="text-xl font-black text-slate-900 mb-6 leading-tight">{imovel.titulo}</h3>
+                                    
+                                    <div className="flex items-center gap-6 text-slate-500 mb-8 font-semibold text-sm">
+                                        <span className="flex items-center gap-2"><Icon name="bed-double" size={18} /> {imovel.quartos}</span>
+                                        <span className="flex items-center gap-2"><Icon name="square" size={18} /> {imovel.areaM2}m²</span>
                                     </div>
+
                                     <div className="flex justify-between items-center pt-6 border-t border-slate-50">
-                                        <span className="text-2xl font-black text-blue-700">R$ {imovel.preco.toLocaleString()}</span>
-                                        <span className="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-bold group-hover:bg-blue-700 transition-colors">Ver Detalhes</span>
+                                        <div>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase">A partir de</p>
+                                            <span className="text-2xl font-black text-blue-700">R$ {imovel.preco.toLocaleString()}</span>
+                                        </div>
+                                        <div className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center group-hover:bg-blue-700 transition-colors">
+                                            <Icon name="arrow-right" size={20} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -136,28 +351,196 @@
                     </div>
                   </section>
                 </main>
-              ) : (
-                <main className="max-w-4xl mx-auto px-6 py-20">
-                    <button onClick={() => setPage('home')} className="text-blue-700 font-bold mb-8">← Voltar</button>
-                    {currentImovel && (
-                        <div>
-                            <h1 className="text-4xl font-black mb-6">{currentImovel.titulo}</h1>
-                            <img src={currentImovel.imagens[0]} className="w-full h-96 object-cover rounded-[2rem] mb-10" />
-                            <p className="text-xl text-slate-600 leading-relaxed">{currentImovel.descricaoLonga}</p>
-                            <div className="mt-10 p-8 bg-blue-50 rounded-[2rem] border border-blue-100">
-                                <h3 className="text-xl font-bold mb-4">Interessado neste imóvel?</h3>
-                                <button className="w-full py-4 bg-blue-700 text-white font-black rounded-xl">Solicitar Consultoria Gratuita</button>
+              )}
+
+              {(page === 'catalogo' || page === 'detalhe') && (
+                <main className="flex-1 page-enter py-12">
+                   {page === 'detalhe' && currentImovel ? (
+                     <div className="max-w-7xl mx-auto px-6">
+                        <button onClick={() => setPage('home')} className="mb-8 font-bold text-blue-700 flex items-center gap-2">
+                            <Icon name="arrow-left" size={18} /> Voltar
+                        </button>
+                        
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                            {/* Main Content */}
+                            <div className="lg:col-span-2">
+                                <img src={currentImovel.imagens[0]} className="w-full h-[60vh] object-cover rounded-[3rem] shadow-2xl mb-12" />
+                                <h1 className="text-4xl md:text-5xl font-black mb-6 tracking-tighter">{currentImovel.titulo}</h1>
+                                <div className="flex flex-wrap gap-4 mb-10">
+                                    {currentImovel.tags.map(tag => (
+                                        <span key={tag} className="px-5 py-2 bg-slate-100 text-slate-600 rounded-full text-xs font-bold">{tag}</span>
+                                    ))}
+                                </div>
+                                <p className="text-xl text-slate-600 leading-relaxed mb-12">{currentImovel.descricaoLonga}</p>
+                                
+                                {/* Status Grid */}
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+                                    <div className="bg-slate-50 p-6 rounded-3xl">
+                                        <Icon name="calendar" className="text-blue-700 mb-3" />
+                                        <p className="text-xs font-bold text-slate-400 uppercase">Entrega</p>
+                                        <p className="font-black text-slate-900">{currentImovel.entrega}</p>
+                                    </div>
+                                    <div className="bg-slate-50 p-6 rounded-3xl">
+                                        <Icon name="square" className="text-blue-700 mb-3" />
+                                        <p className="text-xs font-bold text-slate-400 uppercase">Área</p>
+                                        <p className="font-black text-slate-900">{currentImovel.areaM2}m²</p>
+                                    </div>
+                                    <div className="bg-slate-50 p-6 rounded-3xl">
+                                        <Icon name="bed-double" className="text-blue-700 mb-3" />
+                                        <p className="text-xs font-bold text-slate-400 uppercase">Quartos</p>
+                                        <p className="font-black text-slate-900">{currentImovel.quartos} Suítes</p>
+                                    </div>
+                                    <div className="bg-slate-50 p-6 rounded-3xl">
+                                        <Icon name="car" className="text-blue-700 mb-3" />
+                                        <p className="text-xs font-bold text-slate-400 uppercase">Vagas</p>
+                                        <p className="font-black text-slate-900">{currentImovel.vagas}</p>
+                                    </div>
+                                </div>
+
+                                {/* Section: Diferenciais */}
+                                <div className="mb-16">
+                                    <h3 className="text-2xl font-black mb-8 flex items-center gap-3">
+                                        <div className="w-10 h-1 bg-blue-700"></div> Diferenciais
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {currentImovel.destaques.map((d, idx) => (
+                                            <div key={idx} className="flex items-start gap-4 p-4 border border-slate-100 rounded-2xl">
+                                                <Icon name="check-circle-2" className="text-blue-600 shrink-0" size={20} />
+                                                <span className="font-medium text-slate-700">{d}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Section: FAQ */}
+                                <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-100">
+                                    <h3 className="text-2xl font-black mb-8 flex items-center gap-3">
+                                        <Icon name="info" className="text-blue-700" /> Consultoria Técnica
+                                    </h3>
+                                    <div className="space-y-6">
+                                        {currentImovel.faq.map((item, idx) => (
+                                            <div key={idx} className="pb-4 border-b border-slate-200 last:border-0 last:pb-0">
+                                                <h4 className="font-bold text-lg mb-2 text-slate-900">{item.q}</h4>
+                                                <p className="text-slate-600 leading-relaxed">{item.a}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Sidebar Sticky */}
+                            <div className="lg:sticky lg:top-32 h-fit">
+                                <div className="bg-slate-900 text-white p-10 rounded-[3rem] shadow-2xl">
+                                    <p className="text-blue-400 font-bold uppercase text-[10px] tracking-widest mb-2">Preço Estimado</p>
+                                    <h3 className="text-4xl font-black mb-8">R$ {currentImovel.preco.toLocaleString()}</h3>
+                                    
+                                    <div className="space-y-4 mb-10">
+                                        <p className="text-sm opacity-80 leading-relaxed">
+                                            Valores sujeitos a alteração conforme disponibilidade e tabela vigente do mês.
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <button 
+                                            onClick={() => openModal('contato')}
+                                            className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-2xl transition-all shadow-xl shadow-blue-900/20"
+                                        >
+                                            Solicitar Apresentação
+                                        </button>
+                                        <button 
+                                            onClick={() => openModal('agendamento')}
+                                            className="w-full py-5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-2xl transition-all"
+                                        >
+                                            Agendar Visita
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div className="mt-8 bg-blue-50 p-8 rounded-[2.5rem] border border-blue-100">
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <div className="bg-blue-100 p-3 rounded-full text-blue-700">
+                                            <Icon name="shield-check" size={24} />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-blue-900">Compra Segura</h4>
+                                            <p className="text-xs text-blue-700">Documentação Verificada</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm text-slate-600">
+                                        Todos os projetos listados possuem Registro de Incorporação (RI) ativo.
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    )}
+
+                        {/* Banner Final CTA */}
+                        <div className="mt-20 py-20 px-10 bg-blue-700 rounded-[3rem] text-center text-white relative overflow-hidden shadow-2xl">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                            <div className="relative z-10">
+                                <h2 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Garanta sua unidade com condições exclusivas</h2>
+                                <p className="text-blue-100 text-lg mb-10 max-w-2xl mx-auto">
+                                    Nossos consultores premium estão disponíveis para uma reunião privada, presencial ou por vídeo.
+                                </p>
+                                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                    <button onClick={() => openModal('contato')} className="px-10 py-4 bg-white text-blue-700 font-black rounded-2xl shadow-xl hover:bg-blue-50 transition-all">
+                                        Falar com Especialista
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                   ) : (
+                     <div className="max-w-7xl mx-auto px-6">
+                        <h2 className="text-3xl font-black mb-12">Explorar Todos os Projetos</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                            {imoveis.map(i => (
+                                <div key={i.id} className="border p-4 rounded-3xl cursor-pointer" onClick={() => navigateTo('detalhe', i.id)}>
+                                    <img src={i.imagens[0]} className="rounded-2xl h-48 w-full object-cover mb-4" />
+                                    <h4 className="font-bold">{i.titulo}</h4>
+                                </div>
+                            ))}
+                        </div>
+                     </div>
+                   )}
                 </main>
               )}
-              
-              <footer className="bg-slate-900 text-white py-12 mt-20">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                    <p className="opacity-50 text-sm">© 2024 Imóvel na Planta Premium. Todos os direitos reservados.</p>
+
+              <Footer />
+
+              {/* Modal Simples de Contato */}
+              {isModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/80 backdrop-blur-sm page-enter">
+                  <div className="bg-white p-10 rounded-[3rem] max-w-md w-full relative shadow-2xl">
+                    <button onClick={() => setIsModalOpen(false)} className="absolute top-8 right-8 text-slate-400 hover:text-slate-900"><Icon name="x" /></button>
+                    <h3 className="text-2xl font-black mb-2">
+                        {modalType === 'agendamento' ? 'Agendar Visita' : 'Receber o material'}
+                    </h3>
+                    <p className="text-slate-500 text-sm mb-8">
+                        {modalType === 'agendamento' 
+                            ? 'Escolha a melhor data para conhecer o decorado.' 
+                            : 'Deixe os seus dados e um consultor entrará em contacto com o book completo.'}
+                    </p>
+                    <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert('Solicitação enviada com sucesso!'); setIsModalOpen(false); }}>
+                        <input required placeholder="Nome Completo" className="w-full p-4 bg-slate-50 rounded-2xl border-none outline-blue-700 font-medium" />
+                        <input required placeholder="WhatsApp (com DDD)" className="w-full p-4 bg-slate-50 rounded-2xl border-none outline-blue-700 font-medium" />
+                        
+                        {modalType === 'agendamento' && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <input type="date" required className="w-full p-4 bg-slate-50 rounded-2xl border-none outline-blue-700 font-medium text-slate-500" />
+                                <select className="w-full p-4 bg-slate-50 rounded-2xl border-none outline-blue-700 font-medium text-slate-500">
+                                    <option>Manhã</option>
+                                    <option>Tarde</option>
+                                </select>
+                            </div>
+                        )}
+
+                        <button className="w-full py-5 bg-blue-700 text-white font-black rounded-2xl shadow-lg shadow-blue-100 mt-4 hover:bg-blue-800 transition-all">
+                            {modalType === 'agendamento' ? 'Confirmar Agendamento' : 'Enviar Agora'}
+                        </button>
+                    </form>
+                  </div>
                 </div>
-              </footer>
+              )}
             </div>
           );
         }
