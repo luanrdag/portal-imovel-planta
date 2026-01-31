@@ -1,15 +1,53 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Carregamento do Tailwind via CDN para evitar erros de compilação -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Imóvel na Planta</title>
-  </head>
-  <body>
+    
+    <!-- Tailwind CSS -->
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    
+    <!-- React e Babel (para ler o App.tsx sem precisar de Build) -->
+    <script src="[https://unpkg.com/react@18/umd/react.development.js](https://unpkg.com/react@18/umd/react.development.js)"></script>
+    <script src="[https://unpkg.com/react-dom@18/umd/react-dom.development.js](https://unpkg.com/react-dom@18/umd/react-dom.development.js)"></script>
+    <script src="[https://unpkg.com/@babel/standalone/babel.min.js](https://unpkg.com/@babel/standalone/babel.min.js)"></script>
+    
+    <style>
+        /* Estilos base para evitar flash de conteúdo não estilizado */
+        body { margin: 0; background-color: #f8fafc; }
+        #root { min-height: 100vh; }
+    </style>
+</head>
+<body>
     <div id="root"></div>
-    <!-- O caminho abaixo deve ser EXATAMENTE o nome do seu arquivo no GitHub -->
-    <script type="module" src="/App.tsx"></script>
-  </body>
+
+    <!-- Importante: O tipo deve ser "text/babel" para o navegador ler o código React -->
+    <script type="text/babel" data-type="module">
+        // Importamos os ícones da Lucide via CDN para garantir que funcionam
+        import * as LucideIcons from '[https://esm.sh/lucide-react@0.284.0](https://esm.sh/lucide-react@0.284.0)';
+        window.LucideIcons = LucideIcons;
+
+        // Carregamos o seu ficheiro de código
+        fetch('/App.tsx')
+            .then(response => response.text())
+            .then(code => {
+                // Removemos os imports do topo do seu App.tsx que causariam erro no navegador
+                const cleanCode = code.replace(/import[\s\S]*?from\s+['"].*?['"];?/g, '');
+                
+                // Transformamos e executamos o código
+                const transformed = Babel.transform(cleanCode, {
+                    presets: ['react', 'typescript'],
+                }).code;
+                
+                // Injetamos as dependências necessárias para o seu código
+                const executeCode = new Function('React', 'LucideIcons', 'useState', 'useEffect', 'useMemo', transformed + '\nreturn App;');
+                const App = executeCode(React, LucideIcons, React.useState, React.useEffect, React.useMemo);
+                
+                const root = ReactDOM.createRoot(document.getElementById('root'));
+                root.render(React.createElement(App));
+            })
+            .catch(err => console.error('Erro ao carregar o App.tsx:', err));
+    </script>
+</body>
 </html>
